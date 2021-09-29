@@ -1,5 +1,6 @@
 package com.ufire.authsso.properties;
 
+import com.ufire.authsso.model.ClientDetail;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -15,14 +16,13 @@ import java.util.List;
         prefix = "jwt.sso.server.allow"
 )
 public class SsoServer {
-    private List<String> clientIds;
+    private List<ClientDetail> clientDetails;
 
-
-    public List<String> getClientIds() {
-        return clientIds;
+    public List<ClientDetail> getClientDetails() {
+        return clientDetails;
     }
 
-    public void setClientIds(List<String> clientIds) {
-        this.clientIds = clientIds;
+    public void setClientDetails(List<ClientDetail> clientDetails) {
+        this.clientDetails = clientDetails;
     }
 }

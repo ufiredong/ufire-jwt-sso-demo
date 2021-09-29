@@ -38,7 +38,7 @@ public class SSOserverSelector {
 
     @Bean
     public ClientDetailsService ClientDetailsService(){
-        return  new ClientDetailsService();
+        return  new ClientDetailsService(ssoServer.getClientDetails());
     }
 
 }

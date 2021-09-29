@@ -1,5 +1,7 @@
 package com.ufire.authsso.model;
 
+import java.io.Serializable;
+
 /**
  * @title: ClientDetail
  * @Author ufiredong
@@ -7,7 +9,7 @@ package com.ufire.authsso.model;
  * @Des:
  * @Version 1.0
  */
-public class ClientDetail {
+public class ClientDetail implements Serializable {
     private String clientId;
     private String secret;
     private String targetUrl;
