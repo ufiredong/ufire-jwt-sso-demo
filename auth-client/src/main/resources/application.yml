@@ -1,2 +1,8 @@
 server:
   port: 8099
+jwt:
+  sso:
+    client:
+      client-id: client1
+      secret: 123456
+      home-url:

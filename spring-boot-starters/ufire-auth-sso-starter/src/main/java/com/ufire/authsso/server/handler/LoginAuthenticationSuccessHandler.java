@@ -1,4 +1,4 @@
-package com.ufire.authsso.handler;
+package com.ufire.authsso.server.handler;
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;

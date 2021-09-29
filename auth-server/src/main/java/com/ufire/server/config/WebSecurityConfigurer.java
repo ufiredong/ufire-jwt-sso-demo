@@ -1,7 +1,7 @@
 package com.ufire.server.config;
 
-import com.ufire.authsso.handler.CustomlogoutSuccessHandler;
-import com.ufire.authsso.handler.LoginAuthenticationSuccessHandler;
+import com.ufire.authsso.server.handler.CustomlogoutSuccessHandler;
+import com.ufire.authsso.server.handler.LoginAuthenticationSuccessHandler;
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;

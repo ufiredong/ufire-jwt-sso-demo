@@ -1,4 +1,4 @@
-package com.ufire.authsso.properties;
+package com.ufire.authsso.client.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
