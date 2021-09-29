@@ -1,6 +1,6 @@
-package com.ufire.client.conf;
+package com.ufire.authsso.client.config;
 
-import com.ufire.client.interceptor.LoginInterceptor;
+import com.ufire.authsso.client.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;

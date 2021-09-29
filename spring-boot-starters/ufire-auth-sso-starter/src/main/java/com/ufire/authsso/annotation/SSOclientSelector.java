@@ -1,7 +1,8 @@
 package com.ufire.authsso.annotation;
-import com.ufire.authsso.properties.SsoClient;
+import com.ufire.authsso.client.properties.SsoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({SsoClient.class})
+@ComponentScan(value = "com.ufire.authsso.client")
 public class SSOclientSelector {
     @Autowired
     SsoClient ssoClient;
-
 }
