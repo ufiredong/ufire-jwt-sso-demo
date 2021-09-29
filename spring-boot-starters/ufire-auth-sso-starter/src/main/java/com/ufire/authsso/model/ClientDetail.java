@@ -1,7 +1,5 @@
 package com.ufire.authsso.model;
-
 import java.io.Serializable;
-
 /**
  * @title: ClientDetail
  * @Author ufiredong
