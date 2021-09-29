@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<style type="text/css">
+#layout{
+        width:70%;
+        height: 70%;
+        position: absolute;
+  			border:solid 1px #cccccc;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+  			border-radius: 10px;
+  			text-align:center;
+        }
+.home{		
+  			top: 0;
+        left:0;
+        right: 0;
+        bottom: 0;
+        width:20%;
+        height: 30%;
+  			box-sizing: border-box;
+        border:solid 1px #cccccc;
+  			float:left;
+  			margin-right:3%;
+  			margin-left:7%;
+  			margin-top:10%;
+  			border-radius: 10px;
+  			text-align:center;
+  			line-height:4;
+  			cursor: pointer;
+  			font-size:12px;
+  			
+}
+.user{
+        font-size:12px;
+  			float:left;
+  			width:80%;
+        height:10%;
+         margin-right:1%;
+  			margin-left:7%;
+  			margin-top:5%;
+}
+.exit{
+  float:right;
+}
+.login{
+        width:50%;
+        height: 50%;
+        border:solid 1px #cccccc;
+  			margin-right:10%;
+  			margin-left:25%;
+  			margin-top:10%;
+  			border-radius: 10px;
+  			line-height:2;
+  			font-size:12px;
+}
+.xxx{
+  text-align:center;
+
+  width:50%;
+  height: 50%;
+  margin-right:10%;
+  			margin-left:25%;
+  			margin-top:10%;
+  line-height:3;
+}
+.span{
+	
+  float:right;
+}
+
+.title{
+  text-align:center;
+  width:50%;
+  height: 5%;
+  line-height:8;
+  font-size:12px;
+  margin-left:25%;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<title>Demo</title>
+</head>
+<body>
+	<div id="layout">
+      <div class="title">
+                auth-sso认证中心
+      </div>
+		<div class="login">
+          <form id="login" method="post" action="login" class="xxx">
+             <span>用户：<input  type="text" name="username"><br></span>
+				  <span>密码：<input type="text" name="password"><br></span>
+             <span class="span"><input type="submit" value="login"><br></span>
+</form>
+      </div>
+  </div>
+</body>
+<script type="text/javascript">
+    var i = "\u8BF7\u7A0D\u7B49..."
+    $(document).ready(function () {
+        $("#login").submit(function () {
+            $(":submit").attr("disabled", true);
+            $(":submit").attr("value", i);
+            console.log(i);
+            return true;
+        });
+    });
+</script>
+</html>
+
