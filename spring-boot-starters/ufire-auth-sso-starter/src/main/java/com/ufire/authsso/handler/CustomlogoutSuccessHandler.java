@@ -17,7 +17,6 @@ import java.io.IOException;
  * @Des:
  * @Version 1.0
  */
-@Component
 
 public class CustomlogoutSuccessHandler implements LogoutSuccessHandler {
     @Override

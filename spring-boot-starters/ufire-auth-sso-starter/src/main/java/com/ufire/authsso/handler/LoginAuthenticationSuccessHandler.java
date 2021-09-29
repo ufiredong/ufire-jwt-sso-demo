@@ -19,7 +19,7 @@ import java.io.IOException;
  * 接口获取token
  * @Version 1.0
  */
-@Component
+
 public class LoginAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired

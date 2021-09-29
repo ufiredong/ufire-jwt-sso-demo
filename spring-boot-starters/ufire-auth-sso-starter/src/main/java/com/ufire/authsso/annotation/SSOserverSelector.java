@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({SsoServer.class})
 @ComponentScan(value = "com.ufire.authsso.server")
 public class SSOserverSelector {
+
     @Autowired
     SsoServer ssoServer;
 
