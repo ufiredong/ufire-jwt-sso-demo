@@ -11,4 +11,5 @@ import com.ufire.annotation.EnableSSOserver;
  */
 @EnableSSOserver
 public class SSOserverAutoConfigure {
+
 }

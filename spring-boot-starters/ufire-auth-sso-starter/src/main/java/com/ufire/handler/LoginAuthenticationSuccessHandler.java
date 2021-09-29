@@ -1,5 +1,5 @@
 package com.ufire.handler;
-import com.ufire.endpoint.ClientDetailsService;
+import com.ufire.client.endpoint.ClientDetailsService;
 import com.ufire.model.ClientDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,9 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @title: LoginAuthenticationSuccessHandler

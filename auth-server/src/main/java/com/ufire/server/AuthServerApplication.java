@@ -1,4 +1,4 @@
-package com.ufire;
+package com.ufire.server;
 
 import com.ufire.annotation.EnableSSOserver;
 import org.springframework.boot.SpringApplication;

@@ -1,4 +1,4 @@
-package com.ufire.endpoint;
+package com.ufire.client.endpoint;
 
 import java.security.SecureRandom;
 import java.util.Random;

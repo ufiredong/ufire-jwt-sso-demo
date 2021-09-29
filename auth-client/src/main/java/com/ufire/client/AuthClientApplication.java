@@ -1,4 +1,4 @@
-package com.ufire;
+package com.ufire.client;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

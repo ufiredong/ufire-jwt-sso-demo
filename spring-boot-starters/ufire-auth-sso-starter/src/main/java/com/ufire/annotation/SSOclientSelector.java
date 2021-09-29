@@ -1,7 +1,5 @@
 package com.ufire.annotation;
-
 import com.ufire.properties.SsoClient;
-import com.ufire.properties.SsoServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

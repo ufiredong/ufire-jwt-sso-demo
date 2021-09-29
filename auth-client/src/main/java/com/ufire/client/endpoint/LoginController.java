@@ -1,4 +1,4 @@
-package com.ufire.endpoint;
+package com.ufire.client.endpoint;
 
 /**
  * @title: LoginController

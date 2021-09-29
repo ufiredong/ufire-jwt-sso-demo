@@ -5,3 +5,4 @@ jwt:
     server:
       allow:
         client: client1,client2
+  auth-sso-server: false

@@ -1,8 +1,7 @@
-package com.ufire.endpoint;
+package com.ufire.client.endpoint;
 
 import com.ufire.model.ClientDetail;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

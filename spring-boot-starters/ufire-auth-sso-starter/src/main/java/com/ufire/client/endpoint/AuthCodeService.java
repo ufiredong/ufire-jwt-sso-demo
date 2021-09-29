@@ -1,4 +1,4 @@
-package com.ufire.endpoint;
+package com.ufire.client.endpoint;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
