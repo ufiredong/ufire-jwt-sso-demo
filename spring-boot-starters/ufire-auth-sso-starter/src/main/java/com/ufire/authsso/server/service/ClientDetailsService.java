@@ -1,4 +1,4 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.service;
 
 import com.ufire.authsso.model.ClientDetail;
 import org.springframework.stereotype.Component;

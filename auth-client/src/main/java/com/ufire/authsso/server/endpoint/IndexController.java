@@ -1,4 +1,4 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.endpoint;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

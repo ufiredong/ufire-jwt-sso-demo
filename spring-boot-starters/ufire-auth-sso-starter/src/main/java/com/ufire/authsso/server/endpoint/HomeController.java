@@ -1,4 +1,4 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.endpoint;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

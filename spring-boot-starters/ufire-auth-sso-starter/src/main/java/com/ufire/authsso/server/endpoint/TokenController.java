@@ -1,6 +1,8 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.endpoint;
 
 import com.ufire.authsso.model.ClientDetail;
+import com.ufire.authsso.server.service.AuthCodeService;
+import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,12 +31,12 @@ import java.util.Objects;
 public class TokenController {
     @Autowired
 
-    AuthCodeService authCodeService;
+   public AuthCodeService authCodeService;
 
 
     @Autowired
 
-    ClientDetailsService clientDetailsService;
+    public  ClientDetailsService clientDetailsService;
 
 
     /**

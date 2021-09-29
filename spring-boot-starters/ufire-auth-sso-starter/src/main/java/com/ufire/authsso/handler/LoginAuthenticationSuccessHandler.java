@@ -1,10 +1,7 @@
 package com.ufire.authsso.handler;
-import com.ufire.authsso.endpoint.ClientDetailsService;
 import com.ufire.authsso.model.ClientDetail;
+import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;

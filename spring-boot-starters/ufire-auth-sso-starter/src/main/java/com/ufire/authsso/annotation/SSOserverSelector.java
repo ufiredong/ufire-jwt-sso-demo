@@ -1,13 +1,13 @@
 package com.ufire.authsso.annotation;
 
-import com.ufire.authsso.endpoint.ClientDetailsService;
-import com.ufire.authsso.endpoint.EndpointScan;
 import com.ufire.authsso.handler.CustomlogoutSuccessHandler;
 import com.ufire.authsso.handler.LoginAuthenticationSuccessHandler;
 import com.ufire.authsso.properties.SsoServer;
+import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({SsoServer.class})
+@ComponentScan(value = "com.ufire.authsso.server")
 public class SSOserverSelector {
     @Autowired
     SsoServer ssoServer;
@@ -34,10 +35,6 @@ public class SSOserverSelector {
         return new LoginAuthenticationSuccessHandler();
     }
 
-    @Bean
-    public EndpointScan endpointScan() {
-        return new EndpointScan();
-    }
 
     @Bean
     public ClientDetailsService ClientDetailsService(){

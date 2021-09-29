@@ -1,5 +1,6 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.service;
 
+import com.ufire.authsso.server.endpoint.RandomValueStringGenerator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class AuthCodeService {
-    protected final ConcurrentHashMap<String, Authentication> authorizationCodeStore = new ConcurrentHashMap();
+    public final ConcurrentHashMap<String, Authentication> authorizationCodeStore = new ConcurrentHashMap();
     private RandomValueStringGenerator generator = new RandomValueStringGenerator();
     public String createAuthorizationCode() {
         String code = this.generator.generate();

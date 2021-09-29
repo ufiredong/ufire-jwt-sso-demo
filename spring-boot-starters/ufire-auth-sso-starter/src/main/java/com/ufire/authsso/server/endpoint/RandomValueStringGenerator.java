@@ -1,4 +1,4 @@
-package com.ufire.authsso.endpoint;
+package com.ufire.authsso.server.endpoint;
 
 import java.security.SecureRandom;
 import java.util.Random;
