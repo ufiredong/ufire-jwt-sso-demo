@@ -1,2 +1,0 @@
-http\://www.springframework.org/schema/mvc=com.ufire.handler.LoginAuthenticationSuccessHandler,\
-                                           com.ufire.handler.CustomlogoutSuccessHandler

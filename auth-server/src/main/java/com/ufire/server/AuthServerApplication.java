@@ -1,6 +1,6 @@
 package com.ufire.server;
 
-import com.ufire.annotation.EnableSSOserver;
+import com.ufire.authsso.annotation.EnableSSOserver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
