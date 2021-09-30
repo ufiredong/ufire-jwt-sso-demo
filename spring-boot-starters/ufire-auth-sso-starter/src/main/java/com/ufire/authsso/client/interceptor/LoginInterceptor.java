@@ -33,10 +33,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         Map<String, Cookie> cookieMap = readCookieMap(request);
         if (cookieMap.containsKey("jwt")) {
+            log.info("jtw-token校验通过");
             return true;
         } else {
             String redirectUrl = ssoClient.getRedirectUrl();
             response.sendRedirect(redirectUrl);
+            log.info("jtw-token失效,重定向到sso认证中心"+redirectUrl);
         }
         return false;
     }

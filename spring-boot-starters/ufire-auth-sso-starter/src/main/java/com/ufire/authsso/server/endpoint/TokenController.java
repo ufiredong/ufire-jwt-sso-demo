@@ -60,17 +60,18 @@ public class TokenController {
         String targetUrl = parameters.get("targetUrl");
         // 判断 是否认证通过  生成 Authentication对象
         if (principal instanceof Authentication && ((Authentication) principal).isAuthenticated()) {
-
             Authentication authentication = (Authentication) principal;
             User user =(User) authentication.getPrincipal();
-            log.info("用户:%s已经登录获得Authentication凭证，权限:%s",user.getUsername(),user.getAuthorities());
+            log.info("用户:{}已经登录获得Authentication凭证，权限:{}",user.getUsername(),user.getAuthorities());
             // client 是否在auth服务端有备案， 判断client的合法性。 颁发auth_code 授权码
             if (clientDetailsService.authorize(new ClientDetail(clientId, sercet, targetUrl))) {
                 // 生成随机授权码  缓存到 ConcurrentHashMap 中
                 String auth_code = authCodeService.createAuthorizationCode();
                 authCodeService.store(auth_code, authentication);
                 parameters.put("auth_code", auth_code);
+                log.info("子系统:{}在服务端有备案可以颁发授权码:{}",clientId,auth_code);
                 modelAndView.addAllObjects(parameters);
+                log.info("成功获得auth_code:{}重定向到/authServer/access_token获取access-token",auth_code);
                 return modelAndView;
             }
         }
@@ -89,14 +90,13 @@ public class TokenController {
         Authentication authentication = authCodeService.authorizationCodeStore.get(parameters.get("auth_code"));
         if (Objects.nonNull(authentication)) {
             authCodeService.authorizationCodeStore.remove(auth_code);
+            log.info("授权码auth_code:{}从内存移除，保证只能使用一次",auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
             Cookie jwt = new Cookie("jwt", "123456");
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());
+            log.info("成功获得access-token:123456,设置cookie,domain:{},path:{},携带cookie重定向回:{}",jwt.getDomain(),jwt.getPath(),parameters.get("targetUrl"));
             response.addCookie(jwt);
-//                    String new_url = parameters.get("targetUrl");
-//        String html = "<script type='text/javascript'>location.href='"+parameters.get("targetUrl")+"';</script>";
-//        response.getWriter().print(html);
             return modelAndView;
         } else {
             return null;

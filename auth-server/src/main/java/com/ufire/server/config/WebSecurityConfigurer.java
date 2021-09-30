@@ -55,7 +55,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("admin")
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("admin"))
-                .roles("test")
+                .roles("ADMIN")
+                .and()
+                .withUser("ufire")
+                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("ufire"))
+                .roles("SUB_ADMIN")
         ;
     }
 
