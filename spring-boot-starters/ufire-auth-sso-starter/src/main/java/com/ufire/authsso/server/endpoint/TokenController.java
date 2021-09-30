@@ -1,5 +1,7 @@
 package com.ufire.authsso.server.endpoint;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.server.service.AuthCodeService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @title: TokenController
@@ -35,12 +39,12 @@ import java.util.Objects;
 public class TokenController {
     @Autowired
 
-   public AuthCodeService authCodeService;
+    public AuthCodeService authCodeService;
 
 
     @Autowired
 
-    public  ClientDetailsService clientDetailsService;
+    public ClientDetailsService clientDetailsService;
 
     @Autowired
 
@@ -61,17 +65,17 @@ public class TokenController {
         // 判断 是否认证通过  生成 Authentication对象
         if (principal instanceof Authentication && ((Authentication) principal).isAuthenticated()) {
             Authentication authentication = (Authentication) principal;
-            User user =(User) authentication.getPrincipal();
-            log.info("用户:{}已经登录获得Authentication凭证，权限:{}",user.getUsername(),user.getAuthorities());
+            User user = (User) authentication.getPrincipal();
+            log.info("用户:{}已经登录获得Authentication凭证，权限:{}", user.getUsername(), user.getAuthorities());
             // client 是否在auth服务端有备案， 判断client的合法性。 颁发auth_code 授权码
             if (clientDetailsService.authorize(new ClientDetail(clientId, sercet, targetUrl))) {
                 // 生成随机授权码  缓存到 ConcurrentHashMap 中
                 String auth_code = authCodeService.createAuthorizationCode();
                 authCodeService.store(auth_code, authentication);
                 parameters.put("auth_code", auth_code);
-                log.info("子系统:{}在服务端有备案可以颁发授权码:{}",clientId,auth_code);
+                log.info("子系统:{}在服务端有备案可以颁发授权码:{}", clientId, auth_code);
                 modelAndView.addAllObjects(parameters);
-                log.info("成功获得auth_code:{}重定向到/authServer/access_token获取access-token",auth_code);
+                log.info("成功获得auth_code:{}重定向到/authServer/access_token获取access-token", auth_code);
                 return modelAndView;
             }
         }
@@ -85,17 +89,18 @@ public class TokenController {
      * @return
      */
     @GetMapping("/access_token")
-    public ModelAndView access_token(HttpServletResponse response, @RequestParam Map<String, String> parameters) throws IOException {
+    public ModelAndView access_token(HttpServletResponse response, @RequestParam Map<String, String> parameters) throws Exception {
         String auth_code = parameters.get("auth_code");
         Authentication authentication = authCodeService.authorizationCodeStore.get(parameters.get("auth_code"));
         if (Objects.nonNull(authentication)) {
             authCodeService.authorizationCodeStore.remove(auth_code);
-            log.info("授权码auth_code:{}从内存移除，保证只能使用一次",auth_code);
+            log.info("授权码auth_code:{}从内存移除，保证只能使用一次", auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
-            Cookie jwt = new Cookie("jwt", "123456");
+            String token = JwtUtil.createJWT(JSONObject.toJSON((User) authentication.getPrincipal()).toString(), 60000);
+            Cookie jwt = new Cookie("jwt", token);
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());
-            log.info("成功获得access-token:123456,设置cookie,domain:{},path:{},携带cookie重定向回:{}",jwt.getDomain(),jwt.getPath(),parameters.get("targetUrl"));
+            log.info("成功获得access-token:{},设置cookie,domain:{},path:{},携带cookie重定向回:{}", token, jwt.getDomain(), jwt.getPath(), parameters.get("targetUrl"));
             response.addCookie(jwt);
             return modelAndView;
         } else {
@@ -104,14 +109,17 @@ public class TokenController {
 
     }
 
-
-    /**
-     * 刷新 access_token
-     *
-     * @return
-     */
-    @GetMapping("refresh_token")
-    public String refresh_token() {
-        return null;
+    @RestController
+    @RequestMapping("/token")
+    class RefreshTokenController {
+        /**
+         * 刷新 access_token
+         *
+         * @return
+         */
+        @GetMapping("refresh_token")
+        public String refresh_token() {
+            return null;
+        }
     }
 }

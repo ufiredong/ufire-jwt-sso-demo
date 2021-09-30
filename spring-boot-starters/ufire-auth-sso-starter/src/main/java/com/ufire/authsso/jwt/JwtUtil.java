@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,17 +22,18 @@ import java.util.UUID;
  * @Des:
  * @Version 1.0
  */
+
 public class JwtUtil {
     /**
      * 创建jwt
      *
-     * @param id
      * @param subject
      * @param ttlMillis 过期的时间长度
      * @return
      * @throws Exception
      */
-    public String createJWT(String id, String subject, long ttlMillis) throws Exception {
+    public static String createJWT(String subject, long ttlMillis) throws Exception {
+        String id = UUID.randomUUID().toString().replace("-", "");
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; //指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         long nowMillis = System.currentTimeMillis();//生成JWT的时间
         Date now = new Date(nowMillis);
@@ -61,7 +63,7 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public Claims parseJWT(String jwt) throws Exception{
+    public static Claims parseJWT(String jwt) throws Exception{
         SecretKey key = generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
                 .setSigningKey(key)         //设置签名的秘钥
@@ -73,7 +75,7 @@ public class JwtUtil {
      * 由字符串生成加密key
      * @return
      */
-    public SecretKey generalKey(){
+    public static SecretKey generalKey(){
         String stringKey = Constant.JWT_SECRET;//本地配置文件中加密的密文7786df7fc3a34e26a61c034d5ec8245d
         byte[] encodedKey = Base64.decodeBase64(stringKey);//本地的密码解码[B@152f6e2
         System.out.println(encodedKey);//[B@152f6e2
@@ -82,14 +84,26 @@ public class JwtUtil {
         return key;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) throws Exception {
         JwtUtil util=   new JwtUtil();
-        String ab=util.createJWT(UUID.randomUUID().toString().replace("-", ""), "{id:1000001,name:ufire,role:ROLE_ADMIN}", 60000);
+        String ab=JwtUtil.createJWT("{id:1000001,name:ufire,role:ROLE_ADMIN}", 60000);
         System.out.println(ab);
 //        //eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJEU1NGQVdEV0FEQVMuLi4iLCJzdWIiOiJ7aWQ6MTAwLG5hbWU6eGlhb2hvbmd9IiwidXNlcl9uYW1lIjoiYWRtaW4iLCJuaWNrX25hbWUiOiJEQVNEQTEyMSIsImV4cCI6MTUxNzgzNTE0NiwiaWF0IjoxNTE3ODM1MDg2LCJqdGkiOiJqd3QifQ.ncVrqdXeiCfrB9v6BulDRWUDDdROB7f-_Hg5N0po980
 //        String jwt="eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJEU1NGQVdEV0FEQVMuLi4iLCJzdWIiOiJ7aWQ6MTAwLG5hbWU6eGlhb2hvbmd9IiwidXNlcl9uYW1lIjoiYWRtaW4iLCJuaWNrX25hbWUiOiJEQVNEQTEyMSIsImV4cCI6MTYzMjc5NzI1OSwiaWF0IjoxNjMyNzk3MTk5LCJqdGkiOiJqd3QifQ.TZRkg30oopGWoLFlo7cvvT20s8xMrAPgagowrvtnVqM\n" +
 //                "[B@407a7f2a";
-        Claims c=util.parseJWT(ab);//注意：如果jwt已经过期了，这里会抛出jwt过期异常。
+        Claims c=JwtUtil.parseJWT(ab);//注意：如果jwt已经过期了，这里会抛出jwt过期异常。
         System.out.println(c.getId());//jwt
         System.out.println(c.getIssuedAt());//Mon Feb 05 20:50:49 CST 2018
         System.out.println(c.getSubject());//{id:100,name:xiaohong}
