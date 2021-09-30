@@ -3,6 +3,7 @@ package com.ufire.authsso.server.service;
 import com.ufire.authsso.model.ClientDetail;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,10 +17,15 @@ import java.util.List;
 public class ClientDetailsService {
     private List<ClientDetail> clientDetails;
 
-    public ClientDetailsService(List<ClientDetail> clientDetails){
-        this.clientDetails=clientDetails;
+    public ClientDetailsService(List<ClientDetail> clientDetails) {
+        this.clientDetails = clientDetails;
     }
 
+
+    public ClientDetail getConsole() {
+        ClientDetail console = clientDetails.stream().filter(clientDetail -> clientDetail.getClientId().equals("console")).findFirst().get();
+        return console;
+    }
 
     public Boolean authorize(ClientDetail clientDetail) {
         String clientId = clientDetail.getClientId();

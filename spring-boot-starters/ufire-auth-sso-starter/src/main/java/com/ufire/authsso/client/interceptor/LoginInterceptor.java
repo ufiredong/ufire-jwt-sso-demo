@@ -24,8 +24,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     SsoClient ssoClient;
 
-    public LoginInterceptor(SsoClient ssoClient){
-        this.ssoClient=ssoClient;
+    public LoginInterceptor(SsoClient ssoClient) {
+        this.ssoClient = ssoClient;
     }
 
     @Override
@@ -35,8 +35,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (cookieMap.containsKey("jwt")) {
             return true;
         } else {
-            String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            response.sendRedirect("http://localhost:8080/login?targetUrl=" + url);
+            String redirectUrl = ssoClient.getRedirectUrl();
+            response.sendRedirect(redirectUrl);
         }
         return false;
     }

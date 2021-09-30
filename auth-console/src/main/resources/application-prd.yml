@@ -1,14 +1,13 @@
 auth-server: http://localhost:8080/
 
 server:
-  port: 8099
+  port: 8081
 jwt:
   sso:
     client:
-      client-id: client1
+      client-id: console
       secret: 123456
-      home-url: http://localhost:8099/
+      home-url: http://localhost:8081/
       access-token-url: ${auth-server}access_token
       refresh-token-url: ${auth-server}refresh_token
       authorize-url: ${auth-server}authorize
-      sso-url: http://localhost:8080/

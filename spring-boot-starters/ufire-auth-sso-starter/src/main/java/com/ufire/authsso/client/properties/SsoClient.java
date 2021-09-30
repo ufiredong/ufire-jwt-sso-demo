@@ -21,12 +21,18 @@ public class SsoClient {
 
     private String homeUrl;
 
+    private String ssoUrl;
+
     private String accessTokenUrl;
 
     private String authorizeUrl;
 
     private String refreshTokenUrl;
 
+
+    public String getRedirectUrl() {
+        return this.getSsoUrl() + "login?clientId=" + this.getClientId() + "&sercet=" + this.getSecret() + "&targetUrl=" + homeUrl;
+    }
 
     public String getSecret() {
         return secret;
@@ -74,5 +80,13 @@ public class SsoClient {
 
     public void setRefreshTokenUrl(String refreshTokenUrl) {
         this.refreshTokenUrl = refreshTokenUrl;
+    }
+
+    public String getSsoUrl() {
+        return ssoUrl;
+    }
+
+    public void setSsoUrl(String ssoUrl) {
+        this.ssoUrl = ssoUrl;
     }
 }

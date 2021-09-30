@@ -12,6 +12,7 @@
         <module>auth-server</module>
         <module>auth-client</module>
         <module>spring-boot-starters</module>
+        <module>auth-console</module>
     </modules>
 
     <properties>

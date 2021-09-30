@@ -1,10 +1,13 @@
 package com.ufire.authsso.server.endpoint;
 
 import com.ufire.authsso.model.ClientDetail;
+import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.server.service.AuthCodeService;
 import com.ufire.authsso.server.service.ClientDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,7 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/authServer")
+@Slf4j
 public class TokenController {
     @Autowired
 
@@ -37,6 +41,10 @@ public class TokenController {
     @Autowired
 
     public  ClientDetailsService clientDetailsService;
+
+    @Autowired
+
+    public SsoServerCookie ssoServerCookie;
 
 
     /**
@@ -52,7 +60,10 @@ public class TokenController {
         String targetUrl = parameters.get("targetUrl");
         // 判断 是否认证通过  生成 Authentication对象
         if (principal instanceof Authentication && ((Authentication) principal).isAuthenticated()) {
+
             Authentication authentication = (Authentication) principal;
+            User user =(User) authentication.getPrincipal();
+            log.info("用户:%s已经登录获得Authentication凭证，权限:%s",user.getUsername(),user.getAuthorities());
             // client 是否在auth服务端有备案， 判断client的合法性。 颁发auth_code 授权码
             if (clientDetailsService.authorize(new ClientDetail(clientId, sercet, targetUrl))) {
                 // 生成随机授权码  缓存到 ConcurrentHashMap 中
@@ -80,8 +91,8 @@ public class TokenController {
             authCodeService.authorizationCodeStore.remove(auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
             Cookie jwt = new Cookie("jwt", "123456");
-            jwt.setDomain("localhost");
-            jwt.setPath("/");
+            jwt.setDomain(ssoServerCookie.getDomain());
+            jwt.setPath(ssoServerCookie.getPath());
             response.addCookie(jwt);
 //                    String new_url = parameters.get("targetUrl");
 //        String html = "<script type='text/javascript'>location.href='"+parameters.get("targetUrl")+"';</script>";

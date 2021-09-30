@@ -10,6 +10,7 @@
         <module name="auth-client" />
         <module name="auth-server" />
         <module name="ufire-auth-sso-starter" />
+        <module name="auth-console" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
