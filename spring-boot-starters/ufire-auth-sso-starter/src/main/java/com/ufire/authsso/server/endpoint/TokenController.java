@@ -118,7 +118,8 @@ public class TokenController {
          * @return
          */
         @GetMapping("refresh_token")
-        public String refresh_token() {
+        public String refresh_token(String token) {
+
             return null;
         }
     }
