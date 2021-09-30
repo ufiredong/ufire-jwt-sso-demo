@@ -1,6 +1,6 @@
 package com.ufire.authsso.server.service;
 
-import com.ufire.authsso.server.endpoint.RandomValueStringGenerator;
+import com.ufire.authsso.tools.RandomValueStringGenerator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

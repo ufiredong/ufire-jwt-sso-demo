@@ -1,5 +1,6 @@
 package com.ufire.authsso.server.handler;
 
+import com.ufire.authsso.server.properties.SsoServerCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,11 +20,18 @@ import java.io.IOException;
  */
 
 public class CustomlogoutSuccessHandler implements LogoutSuccessHandler {
+
+    SsoServerCookie ssoServerCookie;
+
+    public  CustomlogoutSuccessHandler(SsoServerCookie ssoServerCookie) {
+        this.ssoServerCookie = ssoServerCookie;
+    }
+
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Cookie jwt = new Cookie("jwt", null);
-        jwt.setDomain("localhost");
-        jwt.setPath("/");
+        jwt.setDomain(ssoServerCookie.getDomain());
+        jwt.setPath(ssoServerCookie.getPath());
         jwt.setMaxAge(0);
         httpServletResponse.addCookie(jwt);
         httpServletResponse.sendRedirect("/login");

@@ -12,7 +12,7 @@ import java.util.List;
  * @Des: client 客户端 接口
  * @Version 1.0
  */
-
+@Component
 public class ClientDetailsService {
     private List<ClientDetail> clientDetails;
 

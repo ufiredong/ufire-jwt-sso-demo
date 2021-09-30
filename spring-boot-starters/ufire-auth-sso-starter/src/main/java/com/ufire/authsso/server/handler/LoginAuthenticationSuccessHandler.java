@@ -1,4 +1,5 @@
 package com.ufire.authsso.server.handler;
+
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,12 @@ import java.io.IOException;
 
 public class LoginAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Autowired
     ClientDetailsService clientDetailsService;
+
+    public LoginAuthenticationSuccessHandler(ClientDetailsService clientDetailsService) {
+        this.clientDetailsService = clientDetailsService;
+    }
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -33,7 +38,7 @@ public class LoginAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
 //        System.out.println(referer);
 //        String targetUrl = referer.substring(referer.indexOf("=") + 1, referer.length());
 //        response.sendRedirect(targetUrl);
-        ClientDetail clientDetail = new ClientDetail("1","2","www");
+        ClientDetail clientDetail = new ClientDetail("1", "2", "www");
         response.sendRedirect("/authServer/authorize?clientId=client1&sercet=123456&targetUrl=http://localhost:8099");
 //        if (clientDetailsService.authorize(clientDetail)) {
 //

@@ -1,5 +1,6 @@
 package com.ufire.authsso.client.interceptor;
 
+import com.ufire.authsso.client.properties.SsoClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,8 +19,14 @@ import java.util.Map;
  * @Version 1.0
  */
 @Slf4j
-@Component
+//@Component
 public class LoginInterceptor implements HandlerInterceptor {
+
+    SsoClient ssoClient;
+
+    public LoginInterceptor(SsoClient ssoClient){
+        this.ssoClient=ssoClient;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {

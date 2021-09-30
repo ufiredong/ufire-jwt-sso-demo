@@ -1,5 +1,6 @@
 package com.ufire.authsso.annotation;
 
+import com.ufire.authsso.configuration.AuthSsoClientConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -17,6 +18,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(SSOclientSelector.class)
+@Import(AuthSsoClientConfiguration.class)
 public @interface EnableSSOclient {
 }

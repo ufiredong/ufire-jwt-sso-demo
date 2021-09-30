@@ -2,6 +2,7 @@ package com.ufire.authsso.server.properties;
 
 import com.ufire.authsso.model.ClientDetail;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @ConfigurationProperties(
         prefix = "jwt.sso.server.allow"
 )
+@Component
 public class SsoServer {
     private List<ClientDetail> clientDetails;
 

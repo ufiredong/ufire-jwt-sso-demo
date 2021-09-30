@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,15 +40,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     CustomlogoutSuccessHandler customlogoutSuccessHandler;
 
 
-    @Bean
-    @Primary
-    public ClientDetailsService clientDetailsService() {
+    @PostConstruct
+    public void initClientDetailsService(){
         List<ClientDetail> clientDetailsList = new ArrayList<>();
         clientDetailsList.add(new ClientDetail("client1", "123456", "http://localhost:8089"));
         clientDetailsList.add(new ClientDetail("client2", "123456", "http://localhost:8089"));
         clientDetailsList.add(new ClientDetail("client3", "123456", "http://localhost:8089"));
         clientDetailsService.setClientDetails(clientDetailsList);
-        return clientDetailsService;
     }
 
 

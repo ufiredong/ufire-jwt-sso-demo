@@ -5,6 +5,6 @@ jwt:
   sso:
     server:
       cookie:
-        domain: http://localhost:8080  #域名站点
+        domain: http://ufiredong.cn  #域名站点
         path: /                        #存放cookie路径
         max-age: 0                     #存活时间

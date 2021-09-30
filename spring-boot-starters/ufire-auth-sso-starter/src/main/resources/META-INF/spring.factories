@@ -1,4 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.ufire.authsso.SSOclientAutoConfigure,\
-  com.ufire.authsso.SSOserverAutoConfigure
-org.springframework.boot.autoconfigure.
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#  com.ufire.authsso.SSOclientAutoConfigure,\
+#  com.ufire.authsso.SSOserverAutoConfigure
