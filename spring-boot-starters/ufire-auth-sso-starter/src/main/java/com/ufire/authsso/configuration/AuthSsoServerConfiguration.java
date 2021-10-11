@@ -1,20 +1,15 @@
 package com.ufire.authsso.configuration;
 
-import com.ufire.authsso.server.endpoint.LoginController;
-import com.ufire.authsso.server.endpoint.TokenController;
+import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.server.handler.CustomlogoutSuccessHandler;
 import com.ufire.authsso.server.handler.LoginAuthenticationSuccessHandler;
-import com.ufire.authsso.server.properties.SsoServer;
 import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -55,4 +50,5 @@ public class AuthSsoServerConfiguration {
     CustomlogoutSuccessHandler customlogoutSuccessHandler() {
         return new CustomlogoutSuccessHandler(ssoServerCookie);
     }
+
 }

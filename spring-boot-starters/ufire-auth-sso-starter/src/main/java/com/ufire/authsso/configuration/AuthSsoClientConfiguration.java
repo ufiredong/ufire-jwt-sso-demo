@@ -2,7 +2,7 @@ package com.ufire.authsso.configuration;
 
 import com.ufire.authsso.client.interceptor.LoginInterceptor;
 import com.ufire.authsso.client.properties.SsoClient;
-import com.ufire.authsso.server.endpoint.LoginController;
+import com.ufire.authsso.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class AuthSsoClientConfiguration {
     @Autowired
     SsoClient ssoClient;
+
 
     @Configuration
     class Webconfig extends WebMvcConfigurerAdapter {

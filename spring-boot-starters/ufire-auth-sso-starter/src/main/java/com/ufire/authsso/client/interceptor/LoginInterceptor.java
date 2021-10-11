@@ -1,6 +1,13 @@
 package com.ufire.authsso.client.interceptor;
 
 import com.ufire.authsso.client.properties.SsoClient;
+import com.ufire.authsso.jwt.JwtUtil;
+import com.ufire.authsso.tools.HttpClientUtil;
+import com.ufire.authsso.tools.RSAUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,14 +31,26 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     SsoClient ssoClient;
 
+
     public LoginInterceptor(SsoClient ssoClient) {
         this.ssoClient = ssoClient;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-
+        String access_token = HttpClientUtil.getInstance().sendHttpGet(ssoClient.getRefreshTokenUrl() + "?token=");
         Map<String, Cookie> cookieMap = readCookieMap(request);
+
+        Cookie jwt = cookieMap.get("jwt");
+        try{
+            Jwt jwt1 = JwtUtil.parserToken(jwt.getValue(), RSAUtil.getPublicKey("rsa-jwt.pubkey"));
+            System.out.println(jwt1);
+        }catch (Exception e){
+            log.error("");
+        }
+
+
+
         if (cookieMap.containsKey("jwt")) {
             log.info("jtw-token校验通过");
             return true;

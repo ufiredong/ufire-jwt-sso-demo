@@ -3,14 +3,19 @@ package com.ufire.authsso.server.endpoint;
 import com.alibaba.fastjson.JSONObject;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.ClientDetail;
+import com.ufire.authsso.model.UserInfo;
 import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.server.service.AuthCodeService;
 import com.ufire.authsso.server.service.ClientDetailsService;
+import com.ufire.authsso.tools.AesUtil;
+import com.ufire.authsso.tools.RSAUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +42,8 @@ import java.util.UUID;
 @RequestMapping("/authServer")
 @Slf4j
 public class TokenController {
+
+
     @Autowired
 
     public AuthCodeService authCodeService;
@@ -96,11 +103,12 @@ public class TokenController {
             authCodeService.authorizationCodeStore.remove(auth_code);
             log.info("授权码auth_code:{}从内存移除，保证只能使用一次", auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
-            String token = JwtUtil.createJWT(JSONObject.toJSON((User) authentication.getPrincipal()).toString(), 60000);
+            String token = JwtUtil.generateToken(new UserInfo(), RSAUtil.getPrivateKey("rsa-jwt.prikey"),30);
             Cookie jwt = new Cookie("jwt", token);
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());
-            log.info("成功获得access-token:{},设置cookie,domain:{},path:{},携带cookie重定向回:{}", token, jwt.getDomain(), jwt.getPath(), parameters.get("targetUrl"));
+            log.info("成功获得access-token:{}", token);
+            log.info("设置cookie,domain:{},path:{},携带cookie重定向回:{}", jwt.getDomain(), jwt.getPath(), parameters.get("targetUrl"));
             response.addCookie(jwt);
             return modelAndView;
         } else {
@@ -118,8 +126,9 @@ public class TokenController {
          * @return
          */
         @GetMapping("refresh_token")
-        public String refresh_token(String token) {
-
+        public String refresh_token(String token) throws Exception {
+//            Claims claims = jwtStore.parseJWT(token);
+//            return jwtStore.createJWT(claims.getSubject(), 1000);
             return null;
         }
     }

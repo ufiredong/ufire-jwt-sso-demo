@@ -8,5 +8,6 @@ package com.ufire.authsso.constant;
  * @Version 1.0
  */
 public class Constant {
-    public static final String JWT_SECRET = "ufiredong";
+    public static final String JWT_KEY_ID = "id";
+    public static final String JWT_KEY_USER_NAME = "username";
 }
