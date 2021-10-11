@@ -12,5 +12,3 @@ jwt:
       refresh-token-url: ${auth-server}refresh_token
       authorize-url: ${auth-server}authorize
       sso-url: http://localhost:8080/
-  rsa:
-    pub-key-path: rsa.pub

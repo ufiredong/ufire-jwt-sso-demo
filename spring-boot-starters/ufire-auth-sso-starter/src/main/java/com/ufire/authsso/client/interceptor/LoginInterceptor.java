@@ -46,7 +46,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             Jwt jwt1 = JwtUtil.parserToken(jwt.getValue(), RSAUtil.getPublicKey("rsa-jwt.pubkey"));
             System.out.println(jwt1);
         }catch (Exception e){
-            log.error("");
+            e.printStackTrace();
         }
 
 

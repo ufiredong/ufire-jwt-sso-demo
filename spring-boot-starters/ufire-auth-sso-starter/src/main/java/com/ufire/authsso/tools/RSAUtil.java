@@ -1,14 +1,18 @@
 package com.ufire.authsso.tools;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.util.ResourceUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+
 
 import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
 
 /**
  * @title: RSAUtil
@@ -18,6 +22,8 @@ import java.security.spec.X509EncodedKeySpec;
  * @Version 1.0
  */
 public class RSAUtil {
+
+    private static String algorithm = "RSA";
 
     public static final BASE64Encoder ENCODER = new BASE64Encoder();
     public static final BASE64Decoder DECODER = new BASE64Decoder();
@@ -29,20 +35,15 @@ public class RSAUtil {
      * @return
      * @throws Exception
      */
-    public static PublicKey getPublicKey(String filePath) throws Exception {
-        FileReader fr = new FileReader(ResourceUtils.getFile(filePath));
-        BufferedReader br = new BufferedReader(fr);
-        StringBuilder keyString = new StringBuilder();
-        String str;
-        while ((str = br.readLine()) != null) {
-            keyString.append(str);
-        }
-        br.close();
-        fr.close();
-        byte[] keyBytes = DECODER.decodeBuffer(keyString.toString());
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePublic(keySpec);
+    public static PublicKey getPublicKey(String key) throws Exception {
+        // 对key进行base64加密
+        byte[] decode = Base64.getMimeDecoder().decode(key.replace("\n", ""));
+        //公钥使用X509进行加密
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(decode);
+        //加密方式RSA
+        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+        //生成publicKey
+        return keyFactory.generatePublic(spec);
     }
 
     /**
@@ -51,21 +52,15 @@ public class RSAUtil {
      * @return
      * @throws Exception
      */
-    public static PrivateKey getPrivateKey(String filename) throws Exception {
-        File file = ResourceUtils.getFile(filename);
-        FileReader fr = new FileReader(ResourceUtils.getFile(filename));
-        BufferedReader br = new BufferedReader(fr);
-        StringBuilder keyString = new StringBuilder();
-        String str;
-        while ((str = br.readLine()) != null) {
-            keyString.append(str);
-        }
-        br.close();
-        fr.close();
-        byte[] keyBytes = DECODER.decodeBuffer(keyString.toString());
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(spec);
+    public static PrivateKey getPrivateKey(String key) throws Exception {
+        //对key进行base64加密
+        byte[] decode = Base64.getDecoder().decode(key.replace("\n", ""));
+        //使用PKCS8进行加密
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(decode);
+        //加密方式RSA
+        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+        //生成privateKey
+        return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
     }
 
     /**
@@ -78,7 +73,7 @@ public class RSAUtil {
     public static void generateKey(String dir, String secret) throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         SecureRandom secureRandom = new SecureRandom(secret.getBytes());
-        keyPairGenerator.initialize(1024, secureRandom);
+        keyPairGenerator.initialize(2048, secureRandom);
         KeyPair keyPair = keyPairGenerator.genKeyPair();
         // 公钥
         PublicKey publicKey = keyPair.getPublic();
@@ -105,19 +100,28 @@ public class RSAUtil {
         System.out.println("私钥生成成功!私钥文件为：" + dir + "rsa-jwt.prikey");
     }
 
-    private static byte[] readFile(String fileName) throws Exception {
-        return Files.readAllBytes(ResourceUtils.getFile(fileName).toPath());
+    public static String getFileValue(String path) throws IOException {
+        File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + path);
+        StringBuffer sb = new StringBuffer();
+        RSAUtil.readToBuffer(sb, file.toPath().toString());
+        return sb.toString();
     }
 
-    private static void writeFile(String destPath, byte[] bytes) throws IOException {
-        File dest = new File(destPath);
-        if (!dest.exists()) {
-            dest.createNewFile();
+    public static void readToBuffer(StringBuffer buffer, String filePath) throws IOException {
+        InputStream is = new FileInputStream(filePath);
+        String line; // 用来保存每行读取的内容
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        line = reader.readLine(); // 读取第一行
+        while (line != null) { // 如果 line 为空说明读完了
+            buffer.append(line); // 将读到的内容添加到 buffer 中
+            buffer.append("\n"); // 添加换行符
+            line = reader.readLine(); // 读取下一行
         }
-        Files.write(dest.toPath(), bytes);
+        reader.close();
+        is.close();
     }
 
     public static void main(String[] args) throws Exception {
-        RSAUtil.generateKey("", "sc@Login(Auth}*^31)&taoqz%");
+       generateKey("","ufiredong");
     }
 }
