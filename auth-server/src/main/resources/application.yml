@@ -12,3 +12,5 @@ rsa:
   key:
     pri:
       key-path: D:\ufire\ufire-jwt-sso-demo\auth-server\src\main\resources\key\rsa-jwt.pri
+    pub:
+      key-path: D:\ufire\ufire-jwt-sso-demo\auth-console\src\main\resources\key\rsa-jwt.pub

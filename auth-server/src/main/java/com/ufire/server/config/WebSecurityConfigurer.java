@@ -1,19 +1,15 @@
 package com.ufire.server.config;
-
 import com.ufire.authsso.server.handler.CustomlogoutSuccessHandler;
 import com.ufire.authsso.server.handler.LoginAuthenticationSuccessHandler;
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.server.service.ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +24,8 @@ import java.util.List;
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     ClientDetailsService clientDetailsService;
-
 
     @Autowired
     LoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler;
@@ -41,7 +35,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 
     @PostConstruct
-    public void initClientDetailsService(){
+    public void initClientDetailsService() {
         List<ClientDetail> clientDetailsList = new ArrayList<>();
         clientDetailsList.add(new ClientDetail("client1", "123456", "http://localhost:8099"));
         clientDetailsList.add(new ClientDetail("console", "123456", "http://localhost:8081"));
@@ -70,7 +64,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         successHandler.setTargetUrlParameter("targetUrl");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
         http.authorizeRequests().antMatchers("/login",
-                "logout").
+                        "logout", "/refresh_token").
                 permitAll();
         http.authorizeRequests().anyRequest()
                 .authenticated()
@@ -89,6 +83,4 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true);
     }
-
-
 }

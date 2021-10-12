@@ -12,7 +12,11 @@ jwt:
       refresh-token-url: http://localhost:8080/refresh_token
       authorize-url: http://localhost:8080/authorize
       sso-url: http://localhost:8080/
+      # 预定义好 永久refresh-token 用于刷新access-token
+    refresh-token:
+      refresh-token: eyJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiY2xpZW50IiwianRpIjoiTnpsa056QmxZemd0TURFNU5DMDBPRGs0TFdJMk5HVXRNRFl6WVdVME5qZG1OR0V4IiwiZXhwIjoxNjQwMDMyNDk5fQ.GiCYS2cCwVs3ZCTDVwsxcZiratPREXEU70GsUBp7pIVbJnLADB9SAfBArVHE4EiiKqzPydGupclDuFBKGaElRrkmLruStAkbNqM13INXrr8q-YNThE4Xc9fS0QojizT2KpfgRwZFwvHj4jtd9eNnIVFs6pY1ySp-kmL4iLsrEgeQ2n2Mn2XI5Px2NO5kgI60QQHK8vFu-IxpMc5bR_kPS0Zap7JOu4MRzAcm-micYYF8zDPutkkmzRpsl7GEKGKpE8eefdVBQy77yavbJ9eoo3dvpWDEABV7zN8124jhEQpHBBG2PLdZuNdRemoaXiHzgs40FHy3st0tygypT_baFw
 rsa:
   key:
     pub:
+      # 公钥路径
       key-path: D:\ufire\ufire-jwt-sso-demo\auth-console\src\main\resources\key\rsa-jwt.pub

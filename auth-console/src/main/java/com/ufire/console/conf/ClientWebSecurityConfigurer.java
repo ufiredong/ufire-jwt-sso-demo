@@ -1,5 +1,7 @@
 package com.ufire.console.conf;
+
 import com.ufire.authsso.client.filter.JwtTokenFilter;
+import com.ufire.authsso.client.properties.RefreshToken;
 import com.ufire.authsso.client.properties.RsaPubKey;
 import com.ufire.authsso.client.properties.SsoClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ClientWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    RefreshToken refreshToken;
+
+    @Autowired
     SsoClient ssoClient;
 
     @Autowired
@@ -25,7 +30,7 @@ public class ClientWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new JwtTokenFilter(ssoClient, rsaPubKey), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtTokenFilter(ssoClient, rsaPubKey, refreshToken), UsernamePasswordAuthenticationFilter.class);
         http.csrf().disable();
     }
 }

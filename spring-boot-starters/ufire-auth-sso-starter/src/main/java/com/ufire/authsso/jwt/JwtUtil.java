@@ -1,20 +1,13 @@
 package com.ufire.authsso.jwt;
-
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ufire.authsso.constant.Constant;
 import com.ufire.authsso.model.RestModel;
 import com.ufire.authsso.model.UserInfo;
+import com.ufire.authsso.tools.RSAUtil;
 import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
-
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
-
 /**
  * @title: JwtUtil
  * @Author ufiredong
@@ -34,10 +27,9 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
+    public static String generateToken(String userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-                .setSubject(userInfo.getUserName())
-                .claim("user", JSONObject.toJSONString(userInfo))
+                .claim("user", userInfo)
                 .setId(createJTI())
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
@@ -68,10 +60,11 @@ public class JwtUtil {
             long b= a / 1000 / 60 ;
             if (b < 10) {
                 restModel.setErrorCode(2);
+                restModel.setData(res.getBody().get("user"));
                 restModel.setErrorMessage("TOKEN还剩"+b+"分钟,即将过期，刷新token");
                 return restModel;
             }
-            restModel.setData(res.getBody());
+            restModel.setData(res.getBody().get("user"));
         } catch (Exception e) {
             restModel.setErrorCode(1);
             restModel.setErrorMessage("解析TOKEN发生异常,重定向回sso");
@@ -82,6 +75,16 @@ public class JwtUtil {
 
     private static String createJTI() {
         return new String(Base64.getEncoder().encode(UUID.randomUUID().toString().getBytes()));
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        // 预定义 几个 永久refresh-token
+        PrivateKey privateKey = RSAUtil.getPrivateKey("D:\\ufire\\ufire-jwt-sso-demo\\auth-server\\src\\main\\resources\\key\\rsa-jwt.pri");
+        String token = generateToken("client", privateKey, 99999);
+
+        System.out.println(token);
+
     }
 
 

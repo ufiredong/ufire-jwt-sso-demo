@@ -1,8 +1,10 @@
 package com.ufire.authsso.server.endpoint;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ufire.authsso.client.properties.RsaPubKey;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.ClientDetail;
+import com.ufire.authsso.model.RestModel;
 import com.ufire.authsso.model.UserInfo;
 import com.ufire.authsso.server.properties.RsaPriKey;
 import com.ufire.authsso.server.properties.SsoServerCookie;
@@ -17,10 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -43,7 +42,9 @@ import java.util.UUID;
 @RequestMapping("/authServer")
 @Slf4j
 public class TokenController {
+    @Autowired
 
+    private RsaPubKey rsaPubKey;
 
     @Autowired
 
@@ -106,7 +107,7 @@ public class TokenController {
             authCodeService.authorizationCodeStore.remove(auth_code);
             log.info("授权码auth_code:{}从内存移除，保证只能使用一次", auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
-            String token = JwtUtil.generateToken(new UserInfo(authentication), rsaPriKey.getPrivateKey(), 30);
+            String token = JwtUtil.generateToken(JSONObject.toJSONString(authentication), rsaPriKey.getPrivateKey(), 30);
             Cookie jwt = new Cookie("jwt", token);
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());
@@ -120,19 +121,21 @@ public class TokenController {
 
     }
 
-    @RestController
-    @RequestMapping("/token")
-    class RefreshTokenController {
-        /**
-         * 刷新 access_token
-         *
-         * @return
-         */
-        @GetMapping("refresh_token")
-        public String refresh_token(String token) throws Exception {
-//            Claims claims = jwtStore.parseJWT(token);
-//            return jwtStore.createJWT(claims.getSubject(), 1000);
+
+    @GetMapping("refresh_token")
+    public String refresh_token(String token, String refreshToken) throws Exception {
+        String newtoken = null;
+        RestModel res = JwtUtil.parserToken(refreshToken, rsaPubKey.getPublicKey());
+        // 永久token有效
+        if (res.getErrorCode() == 0) {
+            RestModel token_res = JwtUtil.parserToken(token, rsaPubKey.getPublicKey());
+            if (token_res.getErrorCode() == 2) {
+                Object data = token_res.getData();
+                newtoken = JwtUtil.generateToken(JSONObject.toJSONString(data), rsaPriKey.getPrivateKey(), 30);
+            }
+        } else {
             return null;
         }
+        return newtoken;
     }
 }

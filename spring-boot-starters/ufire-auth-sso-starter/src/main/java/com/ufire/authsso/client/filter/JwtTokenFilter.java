@@ -1,9 +1,11 @@
 package com.ufire.authsso.client.filter;
 
+import com.ufire.authsso.client.properties.RefreshToken;
 import com.ufire.authsso.client.properties.RsaPubKey;
 import com.ufire.authsso.client.properties.SsoClient;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.RestModel;
+import com.ufire.authsso.tools.HttpClientUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import org.joda.time.DateTime;
@@ -35,6 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final String tokenHeader = "Authorization";
     private SsoClient ssoClient;
     private RsaPubKey rsaPubKey;
+    private RefreshToken refreshToken;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -59,14 +62,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         if (restModel.getErrorCode() == 2) {
             logger.info(restModel.getErrorMessage());
+            String newtoken = HttpClientUtil.getInstance().sendHttpGet("http://localhost:8080/authServer/refresh_token?token=" + token + "&refresh_token="+refreshToken.getRefreshToken());
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
 
-    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey) {
+    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey, RefreshToken refreshToken) {
         this.ssoClient = ssoClient;
         this.rsaPubKey = rsaPubKey;
+        this.refreshToken=refreshToken;
     }
 
 

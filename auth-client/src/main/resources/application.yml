@@ -12,6 +12,8 @@ jwt:
       refresh-token-url: ${auth-server}refresh_token
       authorize-url: ${auth-server}authorize
       sso-url: http://localhost:8080/
+    refresh-token:
+      refresh-token: eyJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiY2xpZW50IiwianRpIjoiWmpsbFpURTBOMll0WWpJd055MDBaakkwTFdJek9URXRZbVk0WWpVek9EVm1NelUyIiwiZXhwIjoxNjQwMDMzMDEwfQ.DIZds4vh-MeT-ON7gJ5t-Jaa1o3nj_Ve9hTzd97UpHqCELlc3rcL-K3avnwM2ZHtEAL_QRGSdq_oY_nbMLAakvxLSyUTbLkZ9k9ggz9sBT7cOBiB5HLMtGRa2NKx5SlfZI8yzxFVYjQAEbSDxAVPeAhjFXSoB1EixZ-Z-kmQkf8xQ-MJSXPTldBF8j0t0o_P55IIbq2-cL3vghjmSWjRlibnLUuyz_fsL9nz1VDNjrZv5LAnlFTeit12VoJCWue_oBXYvbW_sorTgAPHe6woQHumEssMuguY8bjE-Lycuyw4Jon54uFlHEnjr05Yynswk8npzr41hQITf2Cn7V0v8Q
 rsa:
   key:
     pub:
