@@ -8,7 +8,7 @@ jwt:
         domain: localhost  #域名站点
         path: /                        #存放cookie路径
         max-age: 0                     #存活时间
-  rsa:
-    expire: 30 #过期时间,单位分钟
-    pri-key-path: /rsa/rsa.pri
-    secret: ufirelogin231231231321
+rsa:
+  key:
+    pri:
+      key-path: D:\ufire\ufire-jwt-sso-demo\auth-server\src\main\resources\key\rsa-jwt.pri

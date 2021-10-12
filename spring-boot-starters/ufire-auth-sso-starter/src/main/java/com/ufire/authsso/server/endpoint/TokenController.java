@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.ClientDetail;
 import com.ufire.authsso.model.UserInfo;
+import com.ufire.authsso.server.properties.RsaPriKey;
 import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.server.service.AuthCodeService;
 import com.ufire.authsso.server.service.ClientDetailsService;
@@ -44,6 +45,9 @@ import java.util.UUID;
 public class TokenController {
 
 
+    @Autowired
+
+    private RsaPriKey rsaPriKey;
     @Autowired
 
     public AuthCodeService authCodeService;
@@ -102,7 +106,7 @@ public class TokenController {
             authCodeService.authorizationCodeStore.remove(auth_code);
             log.info("授权码auth_code:{}从内存移除，保证只能使用一次", auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
-            String token = JwtUtil.generateToken(new UserInfo(), RSAUtil.getPrivateKey(RSAUtil.getFileValue("key/rsa-jwt.prikey")),30);
+            String token = JwtUtil.generateToken(new UserInfo(authentication), rsaPriKey.getPrivateKey(), 30);
             Cookie jwt = new Cookie("jwt", token);
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());

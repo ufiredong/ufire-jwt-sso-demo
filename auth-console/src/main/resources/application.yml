@@ -12,3 +12,7 @@ jwt:
       refresh-token-url: http://localhost:8080/refresh_token
       authorize-url: http://localhost:8080/authorize
       sso-url: http://localhost:8080/
+rsa:
+  key:
+    pub:
+      key-path: D:\ufire\ufire-jwt-sso-demo\auth-console\src\main\resources\key\rsa-jwt.pub

@@ -1,5 +1,6 @@
 package com.ufire.authsso.client.interceptor;
 
+import com.ufire.authsso.client.properties.RsaPubKey;
 import com.ufire.authsso.client.properties.SsoClient;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.tools.HttpClientUtil;
@@ -31,24 +32,24 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     SsoClient ssoClient;
 
+    RsaPubKey rsaPubKey;
 
-    public LoginInterceptor(SsoClient ssoClient) {
+    public LoginInterceptor(SsoClient ssoClient, RsaPubKey rsaPubKey) {
         this.ssoClient = ssoClient;
+        this.rsaPubKey = rsaPubKey;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String access_token = HttpClientUtil.getInstance().sendHttpGet(ssoClient.getRefreshTokenUrl() + "?token=");
         Map<String, Cookie> cookieMap = readCookieMap(request);
-
         Cookie jwt = cookieMap.get("jwt");
-        try{
-            Jwt jwt1 = JwtUtil.parserToken(jwt.getValue(), RSAUtil.getPublicKey("rsa-jwt.pubkey"));
-            System.out.println(jwt1);
-        }catch (Exception e){
+        try {
+            Jws<Claims> claimsJws = JwtUtil.parserToken(jwt.getValue(), rsaPubKey.getPublicKey());
+            System.out.println(claimsJws);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
         if (cookieMap.containsKey("jwt")) {
@@ -57,7 +58,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         } else {
             String redirectUrl = ssoClient.getRedirectUrl();
             response.sendRedirect(redirectUrl);
-            log.info("jtw-token失效,重定向到sso认证中心"+redirectUrl);
+            log.info("jtw-token失效,重定向到sso认证中心" + redirectUrl);
         }
         return false;
     }

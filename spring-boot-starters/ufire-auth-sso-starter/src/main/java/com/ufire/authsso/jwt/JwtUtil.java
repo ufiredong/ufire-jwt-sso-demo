@@ -1,18 +1,18 @@
 package com.ufire.authsso.jwt;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ufire.authsso.constant.Constant;
 import com.ufire.authsso.model.UserInfo;
 import io.jsonwebtoken.*;
+import org.joda.time.DateTime;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @title: JwtUtil
@@ -26,6 +26,7 @@ public class JwtUtil {
 
     /**
      * 私钥创建 token
+     *
      * @param userInfo      载荷中的数据
      * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
@@ -35,7 +36,9 @@ public class JwtUtil {
     public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
                 .setSubject(userInfo.getUserName())
-                .setExpiration(Date.from(LocalDateTime.now().plusMonths(expireMinutes).atZone(ZoneId.systemDefault()).toInstant()))
+                .claim("user", JSONObject.toJSONString(userInfo))
+                .setId(createJTI())
+                .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
@@ -48,7 +51,12 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public static Jwt parserToken(String token, PublicKey publicKey) {
-        return Jwts.parser().setSigningKey(publicKey).parse(token);
+    public static Jws<Claims> parserToken(String token, PublicKey publicKey) {
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
+
+    private static String createJTI() {
+        return new String(Base64.getEncoder().encode(UUID.randomUUID().toString().getBytes()));
+    }
+
 }
