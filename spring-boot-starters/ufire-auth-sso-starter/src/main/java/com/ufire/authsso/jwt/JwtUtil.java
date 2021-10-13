@@ -1,13 +1,18 @@
 package com.ufire.authsso.jwt;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ufire.authsso.model.JwtToken;
 import com.ufire.authsso.model.RestModel;
 import com.ufire.authsso.model.UserInfo;
 import com.ufire.authsso.tools.RSAUtil;
 import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
+
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.*;
+
 /**
  * @title: JwtUtil
  * @Author ufiredong
@@ -27,7 +32,7 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public static String generateToken(String userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
+    public static String generateToken(UserInfo userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
                 .claim("user", userInfo)
                 .setId(createJTI())
@@ -57,21 +62,23 @@ public class JwtUtil {
                 return restModel;
             }
             // 30分钟有效期 距离过期10分钟内即将过期 刷新token
-            long b= a / 1000 / 60 ;
+            long b = a / 1000 / 60;
             if (b < 10) {
                 restModel.setErrorCode(2);
                 restModel.setData(res.getBody().get("user"));
-                restModel.setErrorMessage("TOKEN还剩"+b+"分钟,即将过期，刷新token");
+                restModel.setErrorMessage("TOKEN还剩" + b + "分钟,即将过期，刷新token");
                 return restModel;
             }
-            restModel.setErrorMessage("TOKEN还剩"+b+"分钟");
-            restModel.setData(res.getBody());
+            UserInfo userInfo = (UserInfo) JSONObject.toJavaObject((JSON) JSONObject.toJSON(res.getBody().get("user")), UserInfo.class);
+            System.out.println(res.getBody().getId());
+            System.out.println(res.getBody().getExpiration().getTime());
+            userInfo.setToken(new JwtToken(res.getBody().getId(), res.getBody().getExpiration().getTime(), "TOKEN还剩" + b + "分钟", token));
+            restModel.setData(userInfo);
         } catch (Exception e) {
             restModel.setErrorCode(1);
             restModel.setErrorMessage("解析TOKEN发生异常,重定向回sso");
             return restModel;
         }
-
         return restModel;
     }
 
@@ -81,11 +88,11 @@ public class JwtUtil {
 
 
     public static void main(String[] args) throws Exception {
-        // 预定义 几个 永久refresh-token
-        PrivateKey privateKey = RSAUtil.getPrivateKey("D:\\ufire\\ufire-jwt-sso-demo\\auth-server\\src\\main\\resources\\key\\rsa-jwt.pri");
-        String token = generateToken("client", privateKey, 99999);
-
-        System.out.println(token);
+//        // 预定义 几个 永久refresh-token
+//        PrivateKey privateKey = RSAUtil.getPrivateKey("D:\\ufire\\ufire-jwt-sso-demo\\auth-server\\src\\main\\resources\\key\\rsa-jwt.pri");
+//        String token = generateToken("client", privateKey, 99999);
+//
+//        System.out.println(token);
 
     }
 

@@ -107,7 +107,7 @@ public class TokenController {
             authCodeService.authorizationCodeStore.remove(auth_code);
             log.info("授权码auth_code:{}从内存移除，保证只能使用一次", auth_code);
             ModelAndView modelAndView = new ModelAndView("redirect:" + parameters.get("targetUrl"));
-            String token = JwtUtil.generateToken(JSONObject.toJSONString(authentication), rsaPriKey.getPrivateKey(), 30);
+            String token = JwtUtil.generateToken(new UserInfo(authentication), rsaPriKey.getPrivateKey(), 30);
             Cookie jwt = new Cookie("jwt", token);
             jwt.setDomain(ssoServerCookie.getDomain());
             jwt.setPath(ssoServerCookie.getPath());
@@ -135,8 +135,8 @@ public class TokenController {
 //                    Object data = token_res.getData();
 //                    newtoken = JwtUtil.generateToken(JSONObject.toJSONString(data), rsaPriKey.getPrivateKey(), 30);
 //                }
-                Object data = token_res.getData();
-                newtoken = JwtUtil.generateToken(JSONObject.toJSONString(data), rsaPriKey.getPrivateKey(), 30);
+                UserInfo data = (UserInfo)token_res.getData();
+                newtoken = JwtUtil.generateToken(data, rsaPriKey.getPrivateKey(), 30);
             } else {
                 return null;
             }

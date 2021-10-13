@@ -1,5 +1,6 @@
 package com.ufire.authsso.model;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.springframework.security.core.Authentication;
 
@@ -14,10 +15,15 @@ import java.io.Serializable;
  */
 @Data
 public class UserInfo implements Serializable {
-    private String id;
     private String userName;
-    private Authentication authentication;
+    private String authentication;
+    private JwtToken token;
 
-    UserInfo(){
+    public UserInfo(Authentication authentication) {
+        this.authentication = JSONObject.toJSONString(authentication);
+        this.userName = authentication.getName();
+    }
+
+    UserInfo() {
     }
 }

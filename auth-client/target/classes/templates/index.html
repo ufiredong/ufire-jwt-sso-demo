@@ -71,7 +71,7 @@
             line-height: 4;
             cursor: pointer;
             font-size: 12px;
-            line-height:2em
+            line-height: 2em
         }
 
         .title {
@@ -84,6 +84,7 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/rend.js"></script>
     <title>Demo</title>
 </head>
 <body>
@@ -91,22 +92,17 @@
     <div class="user">
         <span>用户</span><span><a href="http://localhost:8081">控制台</a></span><span class="exit"><a
             href="http://localhost:8080/logout">logout</a></span>
-        <div class="title">
-            子系统clientA
-        </div>
+        <pre id="json-renderer"></pre>
     </div>
-    <div class="client">
-        <span id="exp"></span>
-        <span id="user"></span>
-    </div>
-
 </div>
 </body>
 <script>
-    $(document).ready(function(){
-        $.get("index/checkToken",function(data,status){
-            document.getElementById("exp").innerText=data.errorMessage;
-            document.getElementById("user").innerText=data.data.user;
+    $(document).ready(function () {
+        $.get("index/checkToken", function (data, status) {
+            var userInfo = data.data;
+            var authentication = data.data.authentication;
+            userInfo.authentication = JSON.parse(authentication)
+            renderJson()
         });
     });
 </script>

@@ -37,8 +37,10 @@ public class ClientWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new JwtTokenFilter(ssoClient, rsaPubKey, refreshToken,ssoServerCookie), UsernamePasswordAuthenticationFilter.class);
-        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("/global/**", "/static/**").permitAll();
+        http.addFilterBefore(new JwtTokenFilter(ssoClient, rsaPubKey, refreshToken, ssoServerCookie), UsernamePasswordAuthenticationFilter.class);
+        http.cors();
     }
 
 }

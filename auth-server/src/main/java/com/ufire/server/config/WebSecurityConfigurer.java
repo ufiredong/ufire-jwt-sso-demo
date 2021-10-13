@@ -66,7 +66,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/login",
                         "logout", "/token/refresh_token").
                 permitAll();
-        http
+        http.authorizeRequests().and()
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(loginAuthenticationSuccessHandler)
