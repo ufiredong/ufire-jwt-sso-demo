@@ -71,6 +71,162 @@
             line-height: 4;
             cursor: pointer;
             font-size: 12px;
+            line-height:2em
+        }
+
+        .title {
+            text-align: center;
+            width: 50%;
+            height: 5%;
+            line-height: 8;
+            font-size: 12px;
+            margin-left: 25%;
+        }
+        <style>
+             /* [jquery.json-viewer.css] START */
+             /* Root element */
+         .json-document {
+             padding: 1em 2em;
+         }
+
+        /* Syntax highlighting for JSON objects */
+        ul.json-dict, ol.json-array {
+            list-style-type: none;
+            margin: 0 0 0 1px;
+            border-left: 1px dotted #ccc;
+            padding-left: 2em;
+        }
+        .json-string {
+            color: #0B7500;
+        }
+        .json-literal {
+            color: #1A01CC;
+            font-weight: bold;
+        }
+
+        /* Toggle button */
+        a.json-toggle {
+            position: relative;
+            color: inherit;
+            text-decoration: none;
+        }
+        a.json-toggle:focus {
+            outline: none;
+        }
+        a.json-toggle:before {
+            font-size: 1.1em;
+            color: #c0c0c0;
+            content: "\25BC"; /* down arrow */
+            position: absolute;
+            display: inline-block;
+            width: 1em;
+            text-align: center;
+            line-height: 1em;
+            left: -1.2em;
+        }
+        a.json-toggle:hover:before {
+            color: #aaa;
+        }
+        a.json-toggle.collapsed:before {
+            /* Use rotated down arrow, prevents right arrow appearing smaller than down arrow in some browsers */
+            transform: rotate(-90deg);
+        }
+
+        /* Collapsable placeholder links */
+        a.json-placeholder {
+            color: #aaa;
+            padding: 0 1em;
+            text-decoration: none;
+        }
+        a.json-placeholder:hover {
+            text-decoration: underline;
+        }
+        /* [jquery.json-viewer.css] END */
+
+        body {
+            margin: 0 100px;
+            font-family: sans-serif;
+        }
+        p.options label {
+            margin-right: 10px;
+        }
+        p.options input[type=checkbox] {
+            vertical-align: middle;
+        }
+        textarea#json-input {
+            width: 100%;
+            height: 200px;
+        }
+        pre#json-renderer {
+
+        }
+
+        #layout {
+            javascript: void(0);
+            width: 70%;
+            height: 70%;
+            position: absolute;
+            border: solid 1px #cccccc;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .home {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 20%;
+            height: 30%;
+            box-sizing: border-box;
+            border: solid 1px #cccccc;
+            float: left;
+            margin-right: 3%;
+            margin-left: 7%;
+            margin-top: 10%;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 4;
+            cursor: pointer;
+            font-size: 12px;
+
+        }
+
+        .user {
+            font-size: 12px;
+            float: left;
+            width: 80%;
+            height: 10%;
+            margin-right: 1%;
+            margin-left: 7%;
+            margin-top: 5%;
+        }
+
+        .exit {
+            float: right;
+        }
+
+        .client {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 60%;
+            height: 30%;
+            box-sizing: border-box;
+            border: solid 1px #cccccc;
+            float: left;
+            margin-left: 20%;
+            margin-top: 10%;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 4;
+            cursor: pointer;
+            font-size: 12px;
             line-height: 2em
         }
 
@@ -90,7 +246,7 @@
 <body>
 <div id="layout">
     <div class="user">
-        <span>用户</span><span><a href="http://localhost:8081">控制台</a></span><span class="exit"><a
+        <a href="http://localhost:8081">控制台</a></span><span class="exit"><a
             href="http://localhost:8080/logout">logout</a></span>
         <pre id="json-renderer"></pre>
     </div>
@@ -102,7 +258,7 @@
             var userInfo = data.data;
             var authentication = data.data.authentication;
             userInfo.authentication = JSON.parse(authentication)
-            renderJson()
+            renderJson(userInfo)
         });
     });
 </script>

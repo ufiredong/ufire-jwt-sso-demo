@@ -1,4 +1,5 @@
 package com.ufire.server.config;
+
 import com.ufire.authsso.server.handler.CustomlogoutSuccessHandler;
 import com.ufire.authsso.server.handler.LoginAuthenticationSuccessHandler;
 import com.ufire.authsso.model.ClientDetail;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +65,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("targetUrl");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
-        http.authorizeRequests().antMatchers("/login",
-                        "logout", "/token/refresh_token").
-                permitAll();
-        http.authorizeRequests().and()
+
+        http.authorizeRequests().anyRequest().authenticated().and()
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(loginAuthenticationSuccessHandler)
@@ -80,5 +80,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(customlogoutSuccessHandler)
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true);
+        http.authorizeRequests().antMatchers("/login",
+                        "logout", "/token/refresh_token").
+                permitAll();
     }
+
 }
