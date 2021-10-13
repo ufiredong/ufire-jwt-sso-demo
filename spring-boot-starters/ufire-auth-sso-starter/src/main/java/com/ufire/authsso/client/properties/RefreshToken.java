@@ -19,6 +19,8 @@ public class RefreshToken {
 
     private String refreshToken;
 
+    private String refreshTokenUrl;
+
     public String getRefreshToken() {
         return refreshToken;
     }
@@ -27,4 +29,11 @@ public class RefreshToken {
         this.refreshToken = refreshToken;
     }
 
+    public String getRefreshTokenUrl() {
+        return refreshTokenUrl;
+    }
+
+    public void setRefreshTokenUrl(String refreshTokenUrl) {
+        this.refreshTokenUrl = refreshTokenUrl;
+    }
 }

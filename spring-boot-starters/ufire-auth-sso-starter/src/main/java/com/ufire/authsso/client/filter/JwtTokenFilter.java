@@ -69,10 +69,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         if (restModel.getErrorCode() == 2) {
             logger.info(restModel.getErrorMessage());
-            String refresh = refresh("http://localhost:8080/token/refresh_token?token=" + token + "&refreshToken=" + refreshToken.getRefreshToken());
+            String refresh = refresh(refreshToken.getRefreshTokenUrl() + "?token=" + token + "&refreshToken=" + refreshToken.getRefreshToken());
             Cookie newtoken = new Cookie("jwt", refresh);
-            jwt.setDomain(ssoServerCookie.getDomain());
-            jwt.setPath(ssoServerCookie.getPath());
+            newtoken.setDomain(ssoServerCookie.getDomain());
+            newtoken.setPath(ssoServerCookie.getPath());
             httpServletResponse.addCookie(jwt);
         }
 
@@ -80,11 +80,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
 
-    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey, RefreshToken refreshToken,SsoServerCookie ssoServerCookie) {
+    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey, RefreshToken refreshToken, SsoServerCookie ssoServerCookie) {
         this.ssoClient = ssoClient;
         this.rsaPubKey = rsaPubKey;
         this.refreshToken = refreshToken;
-        this.ssoServerCookie=ssoServerCookie;
+        this.ssoServerCookie = ssoServerCookie;
     }
 
 
