@@ -64,11 +64,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         successHandler.setTargetUrlParameter("targetUrl");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
         http.authorizeRequests().antMatchers("/login",
-                        "logout", "/refresh_token").
+                        "logout", "/token/refresh_token").
                 permitAll();
-        http.authorizeRequests().anyRequest()
-                .authenticated()
-                .and()
+        http
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(loginAuthenticationSuccessHandler)

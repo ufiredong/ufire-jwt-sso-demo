@@ -5,12 +5,17 @@ import com.ufire.authsso.client.properties.RsaPubKey;
 import com.ufire.authsso.client.properties.SsoClient;
 import com.ufire.authsso.jwt.JwtUtil;
 import com.ufire.authsso.model.RestModel;
-import com.ufire.authsso.tools.HttpClientUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import org.joda.time.DateTime;
+import com.ufire.authsso.server.properties.SsoServerCookie;
+import lombok.SneakyThrows;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -38,7 +43,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private SsoClient ssoClient;
     private RsaPubKey rsaPubKey;
     private RefreshToken refreshToken;
+    public SsoServerCookie ssoServerCookie;
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String token = null;
@@ -62,16 +69,22 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         if (restModel.getErrorCode() == 2) {
             logger.info(restModel.getErrorMessage());
-            String newtoken = HttpClientUtil.getInstance().sendHttpGet("http://localhost:8080/authServer/refresh_token?token=" + token + "&refresh_token="+refreshToken.getRefreshToken());
+            String refresh = refresh("http://localhost:8080/token/refresh_token?token=" + token + "&refreshToken=" + refreshToken.getRefreshToken());
+            Cookie newtoken = new Cookie("jwt", refresh);
+            jwt.setDomain(ssoServerCookie.getDomain());
+            jwt.setPath(ssoServerCookie.getPath());
+            httpServletResponse.addCookie(jwt);
         }
+
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
 
-    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey, RefreshToken refreshToken) {
+    public JwtTokenFilter(SsoClient ssoClient, RsaPubKey rsaPubKey, RefreshToken refreshToken,SsoServerCookie ssoServerCookie) {
         this.ssoClient = ssoClient;
         this.rsaPubKey = rsaPubKey;
-        this.refreshToken=refreshToken;
+        this.refreshToken = refreshToken;
+        this.ssoServerCookie=ssoServerCookie;
     }
 
 
@@ -84,5 +97,23 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         }
         return cookieMap;
+    }
+
+    private String refresh(String path) throws Exception {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 创建一个 GET 请求
+        HttpGet httpGet = new HttpGet(path);
+        // 执行请求
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        //取响应的结果
+        int statusCode = response.getStatusLine().getStatusCode();
+        System.out.println(statusCode);
+        String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+        System.out.println(content);
+        //关闭httpclient
+        response.close();
+        httpClient.close();
+        return content;
+
     }
 }

@@ -64,12 +64,14 @@ public class JwtUtil {
                 restModel.setErrorMessage("TOKEN还剩"+b+"分钟,即将过期，刷新token");
                 return restModel;
             }
-            restModel.setData(res.getBody().get("user"));
+            restModel.setErrorMessage("TOKEN还剩"+b+"分钟");
+            restModel.setData(res.getBody());
         } catch (Exception e) {
             restModel.setErrorCode(1);
             restModel.setErrorMessage("解析TOKEN发生异常,重定向回sso");
             return restModel;
         }
+
         return restModel;
     }
 

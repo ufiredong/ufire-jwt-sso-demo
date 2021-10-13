@@ -1,7 +1,10 @@
 package com.ufire.authsso.configuration;
 import com.ufire.authsso.client.properties.RsaPubKey;
+import com.ufire.authsso.server.properties.SsoServerCookie;
 import com.ufire.authsso.tools.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
@@ -22,6 +25,13 @@ public class AuthSsoClientConfiguration {
     @PostConstruct
     public void initPublicKey() throws Exception {
         rsaPubKey.setPublicKey(RSAUtil.getPublicKey(rsaPubKey.getKeyPath()));
+    }
+
+
+    @Bean
+    @ConditionalOnClass(SsoServerCookie.class)
+    public SsoServerCookie ssoServerCookie(){
+        return new SsoServerCookie();
     }
 
 }

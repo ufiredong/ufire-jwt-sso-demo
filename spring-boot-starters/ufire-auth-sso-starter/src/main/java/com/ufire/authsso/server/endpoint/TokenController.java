@@ -121,21 +121,26 @@ public class TokenController {
 
     }
 
-
-    @GetMapping("refresh_token")
-    public String refresh_token(String token, String refreshToken) throws Exception {
-        String newtoken = null;
-        RestModel res = JwtUtil.parserToken(refreshToken, rsaPubKey.getPublicKey());
-        // 永久token有效
-        if (res.getErrorCode() == 0) {
-            RestModel token_res = JwtUtil.parserToken(token, rsaPubKey.getPublicKey());
-            if (token_res.getErrorCode() == 2) {
+    @RequestMapping("/token")
+    @RestController
+    class RefreshTokenController{
+        @GetMapping("refresh_token")
+        public String refresh_token(String token, String refreshToken) throws Exception {
+            String newtoken = null;
+            RestModel res = JwtUtil.parserToken(refreshToken, rsaPubKey.getPublicKey());
+            // 永久token有效
+            if (res.getErrorCode() == 0) {
+                RestModel token_res = JwtUtil.parserToken(token, rsaPubKey.getPublicKey());
+//                if (token_res.getErrorCode() == 2) {
+//                    Object data = token_res.getData();
+//                    newtoken = JwtUtil.generateToken(JSONObject.toJSONString(data), rsaPriKey.getPrivateKey(), 30);
+//                }
                 Object data = token_res.getData();
                 newtoken = JwtUtil.generateToken(JSONObject.toJSONString(data), rsaPriKey.getPrivateKey(), 30);
+            } else {
+                return null;
             }
-        } else {
-            return null;
+            return newtoken;
         }
-        return newtoken;
     }
 }

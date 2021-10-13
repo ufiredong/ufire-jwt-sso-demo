@@ -67,6 +67,8 @@ public class AuthSsoServerConfiguration {
         return new RsaPubKey();
     }
 
+
+
     /**
      * 加载私钥
      * @return
