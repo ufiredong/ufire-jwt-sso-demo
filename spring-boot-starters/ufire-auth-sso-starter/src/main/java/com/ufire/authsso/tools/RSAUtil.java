@@ -34,14 +34,14 @@ public class RSAUtil {
      * @return
      * @throws Exception
      */
-    public static PublicKey getPublicKey(String filename) throws Exception {
-        byte[] bytes = readFile(filename);
+    public static PublicKey getPublicKey(InputStream stream) throws Exception {
+        byte[] bytes = toByteArray(stream);
         return getPublicKey(bytes);
     }
 
 
-    public static PrivateKey getPrivateKey(String filename) throws Exception {
-        byte[] bytes = readFile(filename);
+    public static PrivateKey getPrivateKey(InputStream stream) throws Exception {
+        byte[] bytes = toByteArray(stream);
         return getPrivateKey(bytes);
     }
 
@@ -98,6 +98,17 @@ public class RSAUtil {
 
     public static void main(String[] args) throws Exception {
         generateKey("ufiredong", 1024);
+    }
+
+
+    public static byte[] toByteArray(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int n = 0;
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+        }
+        return output.toByteArray();
     }
 
 }

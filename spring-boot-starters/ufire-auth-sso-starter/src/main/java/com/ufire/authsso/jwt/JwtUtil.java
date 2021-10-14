@@ -9,6 +9,9 @@ import com.ufire.authsso.tools.RSAUtil;
 import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.*;
@@ -85,6 +88,9 @@ public class JwtUtil {
     private static String createJTI() {
         return new String(Base64.getEncoder().encode(UUID.randomUUID().toString().getBytes()));
     }
+
+
+
 
 
     public static void main(String[] args) throws Exception {
