@@ -94,9 +94,9 @@ public class AuthSsoServerConfiguration {
             rsaPubKey.setPublicKey(RSAUtil.getPublicKey(pub.getInputStream()));
         }
         if (!pri.exists()) {
-            log.info("key/rsa-jwt.pub私钥钥文件找不到！");
+            log.info("key/rsa-jwt.pri私钥钥文件找不到！");
         } else {
-            rsaPubKey.setPublicKey(RSAUtil.getPublicKey(pri.getInputStream()));
+            rsaPriKey.setPrivateKey(RSAUtil.getPrivateKey(pri.getInputStream()));
         }
     }
 }
