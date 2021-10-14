@@ -5,9 +5,9 @@ server:
 jwt:
   sso:
     client:
-      client-id: client1
+      client-id: clienta
       secret: 123456
-      home-url: http://clineta.ufiredong.cn
+      home-url: http://clienta.ufiredong.cn
       access-token-url: ${auth-server}access_token
       refresh-token-url: ${auth-server}refresh_token
       authorize-url: ${auth-server}authorize

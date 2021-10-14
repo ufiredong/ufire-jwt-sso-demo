@@ -39,7 +39,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @PostConstruct
     public void initClientDetailsService() {
         List<ClientDetail> clientDetailsList = new ArrayList<>();
-        clientDetailsList.add(new ClientDetail("client1", "123456", "http://clienta.ufiredong.cn"));
+        clientDetailsList.add(new ClientDetail("clienta", "123456", "http://clienta.ufiredong.cn"));
         clientDetailsList.add(new ClientDetail("console", "123456", "http://console.ufiredong.cn"));
         clientDetailsList.add(new ClientDetail("client2", "123456", "http://localhost:8089"));
         clientDetailsService.setClientDetails(clientDetailsList);

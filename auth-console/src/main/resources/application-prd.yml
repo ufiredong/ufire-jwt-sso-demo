@@ -5,7 +5,7 @@ server:
 jwt:
   sso:
     client:
-      client-id: client1
+      client-id: console
       secret: 123456
       home-url: http://console.ufiredong.cn
       access-token-url: ${auth-server}access_token

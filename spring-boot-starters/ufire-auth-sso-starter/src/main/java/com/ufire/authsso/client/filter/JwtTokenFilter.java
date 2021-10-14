@@ -49,34 +49,31 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String token = null;
-        String authHeader = httpServletRequest.getHeader(this.tokenHeader);
+//        String authHeader = httpServletRequest.getHeader(this.tokenHeader);
         String redirectUrl = ssoClient.getRedirectUrl();
         Map<String, Cookie> cookieMap = readCookieMap(httpServletRequest);
         Cookie jwt = cookieMap.get("jwt");
-        if (Objects.nonNull(authHeader)) {
-            token = authHeader;
-        } else {
-            if (Objects.nonNull(jwt)) {
-                token = jwt.getValue();
-            } else {
+        if (Objects.nonNull(jwt)) {
+            token = jwt.getValue();
+            RestModel restModel = JwtUtil.parserToken(token, rsaPubKey.getPublicKey());
+            if (restModel.getErrorCode() == 0) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+            }
+            if (restModel.getErrorCode() == 1) {
+                logger.info(restModel.getErrorMessage() + redirectUrl);
                 httpServletResponse.sendRedirect(redirectUrl);
             }
-        }
-        RestModel restModel = JwtUtil.parserToken(token, rsaPubKey.getPublicKey());
-        if (restModel.getErrorCode() == 1) {
-            logger.info(restModel.getErrorMessage() + redirectUrl);
+            if (restModel.getErrorCode() == 2) {
+                logger.info(restModel.getErrorMessage());
+                String refresh = refresh(refreshToken.getRefreshTokenUrl() + "?token=" + token + "&refreshToken=" + refreshToken.getRefreshToken());
+                Cookie newtoken = new Cookie("jwt", refresh);
+                newtoken.setDomain(ssoServerCookie.getDomain());
+                newtoken.setPath(ssoServerCookie.getPath());
+                httpServletResponse.addCookie(jwt);
+            }
+        } else {
             httpServletResponse.sendRedirect(redirectUrl);
         }
-        if (restModel.getErrorCode() == 2) {
-            logger.info(restModel.getErrorMessage());
-            String refresh = refresh(refreshToken.getRefreshTokenUrl() + "?token=" + token + "&refreshToken=" + refreshToken.getRefreshToken());
-            Cookie newtoken = new Cookie("jwt", refresh);
-            newtoken.setDomain(ssoServerCookie.getDomain());
-            newtoken.setPath(ssoServerCookie.getPath());
-            httpServletResponse.addCookie(jwt);
-        }
-
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
 
