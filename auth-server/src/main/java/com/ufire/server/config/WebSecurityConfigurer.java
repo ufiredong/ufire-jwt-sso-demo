@@ -62,10 +62,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-        successHandler.setTargetUrlParameter("targetUrl");
-        successHandler.setAlwaysUseDefaultTargetUrl(false);
-
+        http.authorizeRequests().antMatchers("/login",
+                        "logout", "/token/refresh_token").
+                permitAll();
         http.authorizeRequests().anyRequest().authenticated().and()
                 .formLogin()
                 .loginPage("/login")
@@ -80,9 +79,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(customlogoutSuccessHandler)
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true);
-        http.authorizeRequests().antMatchers("/login",
-                        "logout", "/token/refresh_token").
-                permitAll();
     }
 
 }
