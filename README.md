@@ -13,7 +13,7 @@
 
 auth-sso
 
-authServer/authorize 仿照 oatuh2.0 实现简单的 client ,sercet 认证,
+authServer/authorize 仿照 oauth2.0 实现简单的 client ,secret 认证,
 颁发 auth_code 授权码。
 
 authServer/access_token 通过授权码申请 jwt token ,获取 token 后 设置 cookie domain 重定向到目标地址。token/refresh_token 通过服务内部 http 调用 一个内置的永久 token 去为即将过期的 access-token 续签。
