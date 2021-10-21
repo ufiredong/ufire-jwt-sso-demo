@@ -8,6 +8,9 @@
 | auth-console | 控制台聚合入口 | http://console.ufiredong.cn |
 | auth-client  | 客户端 A       | http://clienta.ufiredong.cn |
 
+
+用户  admin  admin
+
 auth-sso
 
 authServer/authorize 仿照 oatuh2.0 实现简单的 client ,sercet 认证,
