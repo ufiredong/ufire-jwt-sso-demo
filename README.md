@@ -18,6 +18,8 @@ authServer/authorize 仿照 oatuh2.0 实现简单的 client ,sercet 认证,
 
 authServer/access_token 通过授权码申请 jwt token ,获取 token 后 设置 cookie domain 重定向到目标地址。token/refresh_token 通过服务内部 http 调用 一个内置的永久 token 去为即将过期的 access-token 续签。
 
+token/refresh-token  因为单点登陆业务系统之间的信任关系较高，我们可以在客户端console、clienta服务配置文件中预定义永久token，token的作用在于客户端向auth-sso刷新即将过期的access-token http调用为服务内部调用。
+
 auth-console/auth-client
 
 check/token 客户端 通过 rsa-jwt.pub 公钥对 token 进行校验。
